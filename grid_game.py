@@ -11,8 +11,18 @@ class GridHuntGame:
         self.agent_pos = [0, 0]  # Starting position (x, y)
 
         # Place a few random food pellets and obstacles (walls)
-        self.food_positions = {[1, 2], [2, 3], [3, 0], [2, 1]}
-        self.walls = {[1, 1], [2, 2]}
+        self.food_positions = {(1, 2), (2, 3), (3, 0), (2, 1)}
+        self.walls = {(1, 1), (2, 2)}
+
+        # Toxic traps scattered across the grid (~10% of cells), avoiding start, walls, and food
+        self.toxic_traps = set()
+        num_traps = max(1, round(width * height * 0.1))
+        while len(self.toxic_traps) < num_traps:
+            tx = random.randint(0, width - 1)
+            ty = random.randint(0, height - 1)
+            pos = (tx, ty)
+            if pos != (0, 0) and pos not in self.walls and pos not in self.food_positions:
+                self.toxic_traps.add(pos)
 
         self.score = 0
         self.steps = 0

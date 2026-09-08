@@ -35,6 +35,17 @@ class VisualGridHuntGame:
             if tuple(op_pos) != (0, 0) and tuple(op_pos) not in self.walls and tuple(op_pos) not in self.food_positions:
                 self.opponents.append(op_pos)
 
+        # Scatter toxic traps (~10% of cells), avoiding start, walls, food, and opponents
+        self.toxic_traps = set()
+        num_traps = max(1, round(self.width * self.height * 0.1))
+        while len(self.toxic_traps) < num_traps:
+            tx = random.randint(0, self.width - 1)
+            ty = random.randint(0, self.height - 1)
+            pos = (tx, ty)
+            if pos != (0, 0) and pos not in self.walls and pos not in self.food_positions \
+                    and pos not in [tuple(op) for op in self.opponents]:
+                self.toxic_traps.add(pos)
+
         self.score = 0
         self.steps = 0
         self.collision = False
