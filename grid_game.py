@@ -31,6 +31,7 @@ class GridHuntGame:
         return {
             'agent_pos': list(self.agent_pos),
             'smells_food': tuple(self.agent_pos) in self.food_positions,
+            'smells_toxin': tuple(self.agent_pos) in self.toxic_traps,
             'hit_wall': tuple(self.agent_pos) in self.walls,
             'score': self.score,
             'remaining_food': len(self.food_positions)
