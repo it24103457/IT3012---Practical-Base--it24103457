@@ -8,6 +8,25 @@ class SearchAgent:
 
     def __init__(self):
         self.actions = ['Up', 'Down', 'Left', 'Right']
+        self.plan = []
+        self.active_algo = 'BFS'
+
+    def sense_and_act(self, percept: dict) -> str:
+        """Build a plan to the closest food if none is queued, then return the next action."""
+        if not self.plan:
+            start = tuple(percept['agent_pos'])
+            foods = percept['all_food']
+            if foods:
+                target = min(foods, key=lambda f: abs(f[0] - start[0]) + abs(f[1] - start[1]))
+                method = {
+                    'BFS': self.bfs_search,
+                    'DFS': self.dfs_search,
+                    'UCS': self.ucs_search,
+                }[self.active_algo]
+                self.plan = method(start, target, percept['walls'], percept['grid_size']) or []
+        if self.plan:
+            return self.plan.pop(0)
+        return 'Up'
 
     def _neighbors(self, pos, walls, grid_size):
         """Yield (action, new_pos) for each valid move from pos."""
