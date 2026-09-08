@@ -62,5 +62,9 @@ class GridHuntGame:
             self.food_positions.remove(tuple_pos)
             self.score += 20  # Reward for eating food pellet
 
+        # Check if standing on a toxic trap
+        if tuple_pos in self.toxic_traps:
+            self.score -= 15  # Penalty for stepping on toxin
+
     def is_done(self) -> bool:
         return len(self.food_positions) == 0 or self.steps >= 20
