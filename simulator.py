@@ -1,12 +1,16 @@
 # simulator.py
 from grid_game import GridHuntGame
-from agent import GreedyGridAgent
+from agent import SearchAgent
+
+# Change this to 'DFS' or 'UCS' to observe path differences
+AGENT_ALGO = 'BFS'
 
 def run_grid_hunt():
     env = GridHuntGame()
-    agent = GreedyGridAgent()
+    agent = SearchAgent()
+    agent.active_algo = AGENT_ALGO
 
-    print("=== UC Berkeley Style Small Grid Hunt Started ===")
+    print(f"=== UC Berkeley Style Small Grid Hunt Started (algorithm: {AGENT_ALGO}) ===")
     while not env.is_done():
         percept = env.get_percept(agent)
         action = agent.sense_and_act(percept)
