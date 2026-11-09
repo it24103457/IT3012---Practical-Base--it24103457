@@ -2,8 +2,8 @@
 from grid_game import GridHuntGame
 from agent import SearchAgent
 
-# Change this to 'DFS' or 'UCS' to observe path differences
-AGENT_ALGO = 'BFS'
+# Lab 07: use the KB-aware A* planner. Change to 'BFS', 'DFS', or 'UCS' to compare.
+AGENT_ALGO = 'AStar'
 
 def run_grid_hunt():
     env = GridHuntGame()

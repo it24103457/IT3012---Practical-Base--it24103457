@@ -25,7 +25,8 @@ class VisualGridHuntGame:
             fx = random.randint(0, self.width - 1)
             fy = random.randint(0, self.height - 1)
             pos_tuple = (fx, fy)
-            if pos_tuple != (0, 0) and pos_tuple not in self.walls:
+            # Lab 07: (1, 0) is the logically unsafe demo tile, so never place food there.
+            if pos_tuple != (0, 0) and pos_tuple not in self.walls and pos_tuple != (1, 0):
                 self.food_positions.add(pos_tuple)
 
         # Generate adversarial opponents
@@ -122,7 +123,7 @@ class GridGameGUI:
         self.env = VisualGridHuntGame(width=width, height=height, num_food=num_food, num_opponents=num_opponents,
                                       custom_walls=walls)
 
-        # Inject the SearchAgent (A*) instead of a random-walk agent
+        # Lab 07: drive the game with the KB-aware A* agent.
         self.agent = SearchAgent()
         self.agent.active_algo = 'AStar'
 
@@ -193,6 +194,7 @@ class GridGameGUI:
 
     def run_loop(self):
         self.btn.config(state="disabled")
+        self.agent.plan = []
 
         def step():
             if not self.env.is_done():
