@@ -69,6 +69,17 @@ class SearchAgent:
         """h(n) = sqrt((x1 - x2)^2 + (y1 - y2)^2)"""
         return math.sqrt((pos[0] - goal[0]) ** 2 + (pos[1] - goal[1]) ** 2)
 
+    # ------------------------------------------------------------------
+    # Heuristic functions
+    # ------------------------------------------------------------------
+    def manhattan_distance(self, pos, goal):
+        """h(n) = |x1 - x2| + |y1 - y2|"""
+        return abs(pos[0] - goal[0]) + abs(pos[1] - goal[1])
+
+    def euclidean_distance(self, pos, goal):
+        """h(n) = sqrt((x1 - x2)^2 + (y1 - y2)^2)"""
+        return math.sqrt((pos[0] - goal[0]) ** 2 + (pos[1] - goal[1]) ** 2)
+
     def _neighbors(self, pos, walls, grid_size):
         """Yield (action, new_pos) for each valid move from pos."""
         width, height = grid_size
