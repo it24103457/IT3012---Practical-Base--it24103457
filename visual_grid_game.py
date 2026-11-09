@@ -2,6 +2,8 @@
 import random
 import tkinter as tk
 
+from agent import SearchAgent
+
 
 class VisualGridHuntGame:
     """A flexible Pacman-style grid environment with support for configurable opponents and larger scales."""
@@ -23,7 +25,8 @@ class VisualGridHuntGame:
             fx = random.randint(0, self.width - 1)
             fy = random.randint(0, self.height - 1)
             pos_tuple = (fx, fy)
-            if pos_tuple != (0, 0) and pos_tuple not in self.walls:
+            # Lab 07: (1, 0) is the logically unsafe demo tile, so never place food there.
+            if pos_tuple != (0, 0) and pos_tuple not in self.walls and pos_tuple != (1, 0):
                 self.food_positions.add(pos_tuple)
 
         # Generate adversarial opponents
@@ -120,6 +123,10 @@ class GridGameGUI:
         self.env = VisualGridHuntGame(width=width, height=height, num_food=num_food, num_opponents=num_opponents,
                                       custom_walls=walls)
 
+        # Lab 07: drive the game with the KB-aware A* agent.
+        self.agent = SearchAgent()
+        self.agent.active_algo = 'AStar'
+
         # Dynamically calculate cell size so the total canvas fits nicely within a 600x600 window ceiling
         max_canvas_dim = 600
         self.cell_size = max(20, min(max_canvas_dim // self.env.width, max_canvas_dim // self.env.height))
@@ -187,10 +194,12 @@ class GridGameGUI:
 
     def run_loop(self):
         self.btn.config(state="disabled")
+        self.agent.plan = []
 
         def step():
             if not self.env.is_done():
-                action = random.choice(['Up', 'Down', 'Left', 'Right'])
+                percept = self.env.get_percept()
+                action = self.agent.sense_and_act(percept)
                 self.env.execute_action(action)
 
                 self.draw_grid()
